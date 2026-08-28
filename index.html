@@ -5,6 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Expanding Cards</title>
 <style>
+@font-face{
+    font-family:"Superior Title";
+    src:url("font/SuperiorTitle-RegularItalic.otf") format("opentype");
+    font-weight:400;
+    font-style:italic;
+}
+@font-face{
+    font-family:"Superior Title";
+    src:url("font/SuperiorTitle-LightItalic.otf") format("opentype");
+    font-weight:300;
+    font-style:italic;
+}
+@font-face{
+    font-family:"Akkurat";
+    src:url("font/Akkurat.ttf") format("truetype");
+    font-weight:400;
+    font-style:normal;
+}
+@font-face{
+    font-family:"Akkurat";
+    src:url("font/Akkurat-Bold.ttf") format("truetype");
+    font-weight:700;
+    font-style:normal;
+}
+@font-face{
+    font-family:"Akkurat";
+    src:url("font/Akkurat-Light.ttf") format("truetype");
+    font-weight:300;
+    font-style:normal;
+}
 html,body{
     margin:0;
     padding:0;
@@ -38,6 +68,7 @@ html,body{
     border-radius:6px;
     cursor:pointer;
     transition:flex .6s cubic-bezier(.16,1,.3,1), height .6s cubic-bezier(.16,1,.3,1);
+    background-image:var(--img-desktop);
     background-size:cover;
     background-position:center;
 }
@@ -69,8 +100,10 @@ html,body{
 }
 .exp-content h2{
     width:100%;
-    font-size:28px;
-    font-weight:600;
+    font-family:"Superior Title", serif;
+    font-size:26px;
+    font-weight:400;
+    font-style:italic;
     line-height:1.2;
     margin:0;
     transition:font-size .45s cubic-bezier(.65,0,.35,1);
@@ -84,7 +117,7 @@ html,body{
     text-align:left;
 }
 .exp-card:not(.active) h2{
-    font-size:24px;
+    font-size:26px;
     width:100%;
 }
 .exp-text-reveal{
@@ -97,10 +130,12 @@ html,body{
     transition:grid-template-rows .5s cubic-bezier(.16,1,.3,1);
 }
 .exp-content p{
-    width:520px;
+    width:600px;
     max-width:calc(100vw - 108px);
     min-height:0;
     margin:0;
+    font-family:"Akkurat", Arial, sans-serif;
+    font-size:18px;
     line-height:1.6;
     opacity:0;
     overflow:hidden;
@@ -130,6 +165,7 @@ html,body{
 .exp-card{
     flex:none;
     height:120px;
+    background-image:var(--img-mobile);
 }
 .exp-card.active{
     flex:none;
@@ -137,9 +173,6 @@ html,body{
 }
 .exp-content{
     padding:24px;
-}
-.exp-content h2{
-    font-size:24px;
 }
 .exp-content p{
     max-width:calc(100vw - 48px);
@@ -157,20 +190,23 @@ html,body{
 const cardsData = [
     {
         title: "The Most All-Inclusive Cruises in Ultra-Luxury",
-        text: "Combining the best-in-class discovery capability with ultra-luxury and an unrivalled choice of included dining, premium beverages, wellness experiences and enriching excursions, Scenic Discovery Yachts include so much more than any other cruise.",
-        image: "https://res.cloudinary.com/dej1hvkk2/image/upload/v1775679394/samples/landscapes/girl-urban-view.jpg",
+        text: "Combining best-in-class discovery capability with ultra-luxury and an unrivalled choice of included dining, premium beverages, wellness experiences and enriching excursions, Scenic Discovery Yachts include so much more than any other cruise.",
+        imageDesktop: "image/desktop/All-Inclusive.png",
+        imageMobile: "image/mobile/All-Inclusive.png",
         active: true
     },
     {
-        title: "Europe",
-        text: "Cruise through charming rivers, medieval villages, and historic capitals.",
-        image: "https://res.cloudinary.com/dej1hvkk2/image/upload/v1775679394/samples/landscapes/girl-urban-view.jpg",
+        title: "Purpose-Built for Discovery",
+        text: "Setting the benchmark in polar exploration, Scenic Eclipse II is purpose-built with a strengthened hull, oversized stabilizers, advanced navigation and a Polar Class 6 rating, ensuring exceptional comfort in the world's most remote regions.",
+        imageDesktop: "image/desktop/Purpose Built.png",
+        imageMobile: "image/mobile/Purpose Built.png",
         active: false
     },
     {
-        title: "Asia",
-        text: "Discover vibrant cultures, ancient temples, and spectacular natural wonders.",
-        image: "https://res.cloudinary.com/dej1hvkk2/image/upload/v1775679394/samples/landscapes/girl-urban-view.jpg",
+        title: "Expert Discovery Team",
+        text: "Gain deeper insights into every destination with Scenic Eclipse's expert 20-member Discovery Team, including naturalists, historians, marine biologists and polar specialists.",
+        imageDesktop: "image/desktop/Expert Discovery Team.png",
+        imageMobile: "image/mobile/Expert Discovery Team.png",
         active: false
     },
 ];
@@ -178,7 +214,7 @@ const cardsData = [
 function renderCards(data){
     const container = document.getElementById("expCards");
     container.innerHTML = data.map(card => `
-        <li class="exp-card${card.active ? " active" : ""}" style="background-image:url('${card.image}')">
+        <li class="exp-card${card.active ? " active" : ""}" style="--img-desktop:url('${card.imageDesktop}');--img-mobile:url('${card.imageMobile}')">
             <div class="exp-content">
                 <h2>${card.title}</h2>
                 <div class="exp-text-reveal"><p>${card.text}</p></div>
