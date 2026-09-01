@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expanding Cards</title>
+<style>
+@font-face{
+    font-family:"Superior Title";
+    src:url("font/SuperiorTitle-RegularItalic.otf") format("opentype");
+    font-weight:400;
+    font-style:italic;
+}
+@font-face{
+    font-family:"Superior Title";
+    src:url("font/SuperiorTitle-LightItalic.otf") format("opentype");
+    font-weight:300;
+    font-style:italic;
+}
+@font-face{
+    font-family:"Akkurat";
+    src:url("font/Akkurat.ttf") format("truetype");
+    font-weight:400;
+    font-style:normal;
+}
+@font-face{
+    font-family:"Akkurat";
+    src:url("font/Akkurat-Bold.ttf") format("truetype");
+    font-weight:700;
+    font-style:normal;
+}
+@font-face{
+    font-family:"Akkurat";
+    src:url("font/Akkurat-Light.ttf") format("truetype");
+    font-weight:300;
+    font-style:normal;
+}
+html,body{
+    margin:0;
+    padding:0;
+}
+.exp-cards-wrapper,
+.exp-cards-wrapper *{
+    box-sizing:border-box;
+}
+.exp-cards-wrapper{
+    font-family:Arial, Helvetica, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    padding:0;
+}
+.exp-cards{
+    width:100%;
+    max-width:1400px;
+    height:500px;
+    display:flex;
+    gap:20px;
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+.exp-card{
+    position:relative;
+    flex:1;
+    overflow:hidden;
+    border-radius:6px;
+    cursor:pointer;
+    transition:flex .6s cubic-bezier(.16,1,.3,1), height .6s cubic-bezier(.16,1,.3,1);
+    background-image:var(--img-desktop);
+    background-size:cover;
+    background-position:center;
+}
+.exp-card.active{
+    flex:3;
+}
+.exp-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,.75) 0%,
+        rgba(0,0,0,.45) 45%,
+        rgba(0,0,0,.1) 100%
+    );
+}
+.exp-content{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:flex-start;
+    text-align:left;
+    padding:30px;
+    color:#fff;
+    z-index:2;
+}
+.exp-content h2{
+    width:100%;
+    font-family:"Superior Title", serif;
+    font-size:26px;
+    font-weight:400;
+    font-style:italic;
+    line-height:1.2;
+    margin:0;
+    transition:font-size .45s cubic-bezier(.65,0,.35,1);
+}
+.exp-card.active h2{
+    transition:font-size .5s cubic-bezier(.16,1,.3,1);
+}
+.exp-card:not(.active) .exp-content{
+    justify-content:flex-end;
+    align-items:flex-start;
+    text-align:left;
+}
+.exp-card:not(.active) h2{
+    font-size:26px;
+    width:100%;
+}
+.exp-text-reveal{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .5s cubic-bezier(.65,0,.35,1);
+}
+.exp-card.active .exp-text-reveal{
+    grid-template-rows:1fr;
+    transition:grid-template-rows .5s cubic-bezier(.16,1,.3,1);
+}
+.exp-content p{
+    width:600px;
+    max-width:calc(100vw - 108px);
+    min-height:0;
+    margin:0;
+    font-family:"Akkurat", Arial, sans-serif;
+    font-size:18px;
+    line-height:1.6;
+    opacity:0;
+    overflow:hidden;
+    transform:translateY(15px);
+    transition:
+        margin-top .45s cubic-bezier(.65,0,.35,1),
+        opacity .25s ease,
+        transform .3s cubic-bezier(.4,0,1,1);
+}
+.exp-card.active p{
+    margin-top:14px;
+    opacity:1;
+    transform:translateY(0);
+    transition:
+        margin-top .5s cubic-bezier(.16,1,.3,1),
+        opacity .35s ease .15s,
+        transform .4s cubic-bezier(.22,1,.36,1) .15s;
+}
+@media (max-width:900px){
+.exp-cards-wrapper{
+    padding:0;
+}
+.exp-cards{
+    flex-direction:column;
+    height:auto;
+}
+.exp-card{
+    flex:none;
+    height:120px;
+    background-image:var(--img-mobile);
+}
+.exp-card.active{
+    flex:none;
+    height:320px;
+}
+.exp-content{
+    padding:24px;
+}
+.exp-content p{
+    max-width:calc(100vw - 48px);
+}
+}
+</style>
+</head>
+<body>
+
+<div class="exp-cards-wrapper">
+    <ul class="exp-cards" id="expCards"></ul>
+</div>
+
+<script>
+const cardsData = [
+    {
+        title: "The Most All-Inclusive Cruises in Ultra-Luxury",
+        text: "Combining best-in-class discovery capability with ultra-luxury and an unrivalled choice of included dining, premium beverages, wellness experiences and enriching excursions, Scenic Discovery Yachts include so much more than any other cruise.",
+        imageDesktop: "image/desktop/All-Inclusive.png",
+        imageMobile: "image/mobile/All-Inclusive.png",
+        active: true
+    },
+    {
+        title: "Purpose-Built for Discovery",
+        text: "Setting the benchmark in polar exploration, Scenic Eclipse II is purpose-built with a strengthened hull, oversized stabilizers, advanced navigation and a Polar Class 6 rating, ensuring exceptional comfort in the world's most remote regions.",
+        imageDesktop: "image/desktop/Ross Island_East Antarctica.png",
+        imageMobile: "image/mobile/Ross Island_East Antarctica.png",
+        active: false
+    },
+    {
+        title: "Expert Discovery Team",
+        text: "Gain deeper insights into every destination with Scenic Eclipse's expert 20-member Discovery Team, including naturalists, historians, marine biologists and polar specialists.",
+        imageDesktop: "image/desktop/Expert Discovery Team.png",
+        imageMobile: "image/mobile/Expert Discovery Team.png",
+        active: false
+    },
+];
+
+function renderCards(data){
+    const container = document.getElementById("expCards");
+    container.innerHTML = data.map(card => `
+        <li class="exp-card${card.active ? " active" : ""}" style="--img-desktop:url('${card.imageDesktop}');--img-mobile:url('${card.imageMobile}')">
+            <div class="exp-content">
+                <h2>${card.title}</h2>
+                <div class="exp-text-reveal"><p>${card.text}</p></div>
+            </div>
+        </li>
+    `).join("");
+
+    container.querySelectorAll(".exp-card").forEach(card => {
+        card.addEventListener("click", () => {
+            container.querySelectorAll(".exp-card").forEach(c => c.classList.remove("active"));
+            card.classList.add("active");
+        });
+    });
+}
+
+renderCards(cardsData);
+</script>
+</body>
+</html>
